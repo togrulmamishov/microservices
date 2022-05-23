@@ -13,7 +13,7 @@ public record NotificationServiceImpl(NotificationRepository notificationReposit
         implements NotificationService {
 
     @Override
-    public void sendNotification(NotificationRequest notificationRequest) {
+    public void send(NotificationRequest notificationRequest) {
 
         notificationRepository.save(Notification.builder()
                 .sender("Togrul Mamishov")

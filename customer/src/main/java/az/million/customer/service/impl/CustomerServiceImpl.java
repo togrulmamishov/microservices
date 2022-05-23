@@ -1,5 +1,6 @@
 package az.million.customer.service.impl;
 
+import az.million.amqp.RabbitMQMessageProducer;
 import az.million.clients.fraud.FraudClient;
 import az.million.clients.notification.NotificationClient;
 import az.million.clients.notification.NotificationRequest;
@@ -14,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 public record CustomerServiceImpl(CustomerRepository customerRepository,
                                   RestTemplate restTemplate,
                                   FraudClient fraudClient,
-                                  NotificationClient notificationClient) implements CustomerService {
+                                  RabbitMQMessageProducer rabbitMQMessageProducer) implements CustomerService {
 
     @Override
     public void registerCustomer(CustomerRequest request) {
@@ -28,15 +29,18 @@ public record CustomerServiceImpl(CustomerRepository customerRepository,
 
         var fraudCheckResponse = fraudClient.isFraudster(customer.getId());
 
-        if(fraudCheckResponse.isFraudster()) {
+        if (fraudCheckResponse.isFraudster()) {
             throw new IllegalStateException("fraudster");
         }
 
-        notificationClient.sendNotification(new NotificationRequest(
+        NotificationRequest notificationRequest = new NotificationRequest(
                 String.format("Hi %s, welcome to my tutorial", customer.getFirstName() + " " + customer.getLastName()),
                 customer.getEmail(),
                 customer.getId()
-        ));
+        );
+        rabbitMQMessageProducer.publish(notificationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key");
 
     }
 }

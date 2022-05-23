@@ -17,6 +17,6 @@ public record NotificationController(NotificationService notificationService) {
     @PostMapping(path = "api/v1/notification")
     public void sendNotification(@RequestBody NotificationRequest notificationRequest) {
         log.info("New notification... {}", notificationRequest);
-        notificationService.sendNotification(notificationRequest);
+        notificationService.send(notificationRequest);
     }
 }

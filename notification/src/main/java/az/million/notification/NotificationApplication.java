@@ -9,6 +9,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
+import java.util.List;
+
 @SpringBootApplication(
         scanBasePackages = {
                 "az.million.notification",
@@ -25,12 +27,15 @@ public class NotificationApplication {
         SpringApplication.run(NotificationApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner commandLineRunner(RabbitMQMessageProducer producer,
-                                        NotificationConfig notificationConfig) {
-        return args -> producer.publish(
-                "foo",
-                notificationConfig.getInternalExchange(),
-                notificationConfig.getInternalNotificationRoutingKey());
-    }
+//    @Bean
+//    CommandLineRunner commandLineRunner(RabbitMQMessageProducer producer,
+//                                        NotificationConfig notificationConfig) {
+//        return args -> producer.publish(
+//                List.of(new Person("Togrul", 24),
+//                        new Person("Əli", 19)),
+//                notificationConfig.getInternalExchange(),
+//                notificationConfig.getInternalNotificationRoutingKey());
+//    }
+//
+//    record Person(String name, int age) {}
 }
