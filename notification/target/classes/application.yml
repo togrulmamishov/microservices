@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: notification
+    n        ame: notification
   datasource:
     username: amigoscode
     password: password

@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public record CustomerServiceImpl(CustomerRepository customerRepository,
-                                  RestTemplate restTemplate,
                                   FraudClient fraudClient,
                                   RabbitMQMessageProducer rabbitMQMessageProducer) implements CustomerService {
 
